@@ -21,7 +21,7 @@ As a user, you ideally shouldn't ever have to use Homebrew directly, short of in
 * `Homebrew.rm("pkg")` will uninstall `pkg`
 * `Homebrew.update()` will update the available formulae for installation and upgrade installed packages if a newer version is available
 * `Homebrew.list()` will list all installed packages and versions
-* `Homebrew.installed("pkg")` will return a boolean denoting whether or not `pkg` is installed
+* `Homebrew.installed("pkg")` will return a `Bool` denoting whether or not `pkg` is installed
 * `Homebrew.prefix()` will return the prefix that all packages are installed to
 
 
@@ -73,3 +73,11 @@ The biggest reason is the patches that have been applied to Homebrew itself. Thi
 
 If you already have something installed, and it is usable, (e.g. `BinDeps` can load it and it passes any quick internal tests the Package authors have defined) then `Homebrew.jl` won't try to install it. `BinDeps` always checks to see if there is a library in the current load path that satisfies the requirements setup by package authors, and if there is, it doesn't build anything.
 
+
+# TODO
+
+* Remove vast majority of formulae from `staticfloat/juliadeps`, as they are no longer needed now that we iterate over `deps_sorted()` and `--force-bottle` each one individually
+
+* Test on 0.3
+
+* Test on previous 
