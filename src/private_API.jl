@@ -9,6 +9,17 @@ const BREW_URL = "https://github.com/Homebrew/brew"
 const BREW_BRANCH = "master"
 const BOTTLE_SERVER = "https://juliabottles.s3.amazonaws.com"
 
+
+"""
+download_and_unpack(url::String, target_dir::String)
+
+Download a tarball from `url` and unpack it into `target_dir`.
+"""
+function download_and_unpack(url::String, target_dir::String; strip=0)
+    @compat run(pipeline(`curl -# -L $url`,
+                         `tar xz -m --strip 1 -C $target_dir`))
+end
+
 """
 install_brew()
 
@@ -30,23 +41,13 @@ function install_brew()
         end
     end
 
-    if !isfile(joinpath(brew_prefix,"bin","otool"))
-        # Download/install packaged install_name_tools
-        try
-            Base.info("Downloading cctools...")
-            @compat run(pipeline(`curl -L $BOTTLE_SERVER/cctools_bundle.tar.gz`,
-                                 `tar xz -C $(joinpath(brew_prefix,"bin"))`))
-        catch
-            warn("Could not download/extract $BOTTLE_SERVER/cctools_bundle.tar.gz into $(joinpath(brew_prefix,"bin"))!")
-            rethrow()
-        end
-    end
-
     # Tap homebrew/core, always and forever
     tap("homebrew/core")
 
     # Tap our own "overrides" tap
     tap("staticfloat/juliadeps")
+
+    # Add cctools and force-link it
 end
 
 """
